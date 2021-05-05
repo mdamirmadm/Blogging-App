@@ -1,0 +1,26 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.card{
+    margin: 5px auto;
+    box-shadow: 0px 0px 10px #000;
+}
+
+/* .card img{
+    width: 400px;
+    height: 350px;
+    margin: 10px auto;
+} */
+
+
+.footer{
+    position: relative;
+    left: 0px;
+    bottom: 0px;
+    color: #fff;
+    padding: 15px 0px 2px 0px;
+    margin-top: 40px;
+}

@@ -1,0 +1,57 @@
+<%-include('../partials/header')%>
+<%-include('../partials/navbar')%>
+
+<div class="container mt-3">
+
+    <div class="row">
+      <%-include('../partials/flash')%>
+        <div class="col-lg-7 col-sm-12">
+            <div class="card text-center w-100">
+                <img src="<%=blog.img%>" class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title display-3"><%=blog.title%></h5>
+                  <p class="card-title text-muted">Author: <%=blog.author%></p>
+                  <p class="card-text lead"><%=blog.desc%></p>
+                  <div class="d-flex justify-content-center">
+                    <a href="<%=blog._id%>/edit" class="btn btn-primary">Edit</a>
+                    <form action="/blogs/<%=blog._id%>?_method=DELETE" method="POST" style="margin-left: 5px;">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+        <div class="offset-lg-1 col-lg-4">
+            <h1 class="display-4 mt-5"><i class="fa fa-comments" aria-hidden="true"></i> Comments</h1>
+            <form action="/blogs/<%=blog._id%>/comment" method="POST" class="mb-5">
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating</label>
+                    <input type="range" class="form-range" id="rating" name="rating" min="0" max="5">
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Leave a Comment</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="5" cols="20"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            
+            <%for(let comment of blog.comments){%>
+                <div class="card mt-2">
+                    <div class="card-header">
+                      User
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title"><%=comment.rating%></h5>
+                      <p class="card-text"><%=comment.comment%></p>
+                    </div>
+                  </div>
+            <%}%>
+            
+        </div>
+    </div>
+</div>
+
+
+<%-include('../partials/footer')%>

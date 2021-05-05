@@ -1,0 +1,37 @@
+<%-include('../partials/header')%>
+<%-include('../partials/navbar')%>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-lg-8 m-auto">
+            <form class="needs-validation" action="/blogs" method="POST" novalidate>
+                <h1 class="display-3 mb-3">Create a Blog</h1>
+                <div class="mb-3">
+                  <label for="title" class="form-label">Title</label>
+                  <input type="text" class="form-control" id="title" name="blog[title]" placeholder="Title" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="img" class="form-label">Image URL</label>
+                    <input type="text" class="form-control" id="img" name="blog[img]" placeholder="Image URL" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="author" class="form-label">Author</label>
+                    <input type="text" class="form-control" id="author" name="blog[author]" placeholder="Author" required>
+                </div>
+               
+                <div class="mb-3">
+                    <label for="desc" class="form-label">Description</label>
+                    <textarea class="form-control" id="desc" name="blog[desc]" rows="5" cols="30" required></textarea>
+                  </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<%-include('../partials/footer')%>
