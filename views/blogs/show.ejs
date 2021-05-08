@@ -1,5 +1,6 @@
 <%-include('../partials/header')%>
 <%-include('../partials/navbar')%>
+<link rel="stylesheet" type="text/css" href="/css/star.css">
 
 <div class="container mt-3">
 
@@ -12,22 +13,40 @@
                   <h5 class="card-title display-3"><%=blog.title%></h5>
                   <p class="card-title text-muted">Author: <%=blog.author%></p>
                   <p class="card-text lead"><%=blog.desc%></p>
+
+                  <%if(currentUser && blog.author===currentUser.username){%>
                   <div class="d-flex justify-content-center">
                     <a href="<%=blog._id%>/edit" class="btn btn-primary">Edit</a>
                     <form action="/blogs/<%=blog._id%>?_method=DELETE" method="POST" style="margin-left: 5px;">
                         <button class="btn btn-danger">Delete</button>
                     </form>
                   </div>
+                  <%}%>
+
                 </div>
               </div>
         </div>
 
-        <div class="offset-lg-1 col-lg-4">
+        <div class="offset-1 col-10 col-lg-4">
             <h1 class="display-4 mt-5"><i class="fa fa-comments" aria-hidden="true"></i> Comments</h1>
             <form action="/blogs/<%=blog._id%>/comment" method="POST" class="mb-5">
                 <div class="mb-3">
                     <label for="rating" class="form-label">Rating</label>
-                    <input type="range" class="form-range" id="rating" name="rating" min="0" max="5">
+                    <fieldset class="starability-basic">
+                    
+                      <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
+                      <input type="radio" id="first-rate1" name="rating" value="1" />
+                      <label for="first-rate1" title="Terrible">1 star</label>
+                      <input type="radio" id="first-rate2" name="rating" value="2" />
+                      <label for="first-rate2" title="Not good">2 stars</label>
+                      <input type="radio" id="first-rate3" name="rating" value="3" />
+                      <label for="first-rate3" title="Average">3 stars</label>
+                      <input type="radio" id="first-rate4" name="rating" value="4" />
+                      <label for="first-rate4" title="Very good">4 stars</label>
+                      <input type="radio" id="first-rate5" name="rating" value="5" />
+                      <label for="first-rate5" title="Amazing">5 stars</label>
+                    </fieldset>
+                    
                 </div>
                 <div class="mb-3">
                     <label for="comment" class="form-label">Leave a Comment</label>
@@ -40,10 +59,12 @@
             <%for(let comment of blog.comments){%>
                 <div class="card mt-2">
                     <div class="card-header">
-                      User
+                      <%=comment.user%>
                     </div>
                     <div class="card-body">
-                      <h5 class="card-title"><%=comment.rating%></h5>
+                      <p class="starability-result" data-rating="<%=comment.rating%>">
+                        Rated: <%=comment.rating%> stars
+                      </p>
                       <p class="card-text"><%=comment.comment%></p>
                     </div>
                   </div>

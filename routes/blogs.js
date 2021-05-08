@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Blog = require('../models/blog');
 const Comment = require('../models/comment');
+const {isLoggedIn} = require('../middleware');
+// const upload = require('../handlers/multer');
 
 
 //Getting all the blogs
@@ -20,7 +22,7 @@ router.get('/blogs', async(req,res) => {
 
 
 //Getting a form to create new blog
-router.get('/blogs/new', (req,res) => {
+router.get('/blogs/new',isLoggedIn, (req,res) => {
     try{
         res.render('blogs/new');
     }
@@ -33,7 +35,7 @@ router.get('/blogs/new', (req,res) => {
 })
 
 //Posting a new Blog
-router.post('/blogs', async(req,res) => {
+router.post('/blogs',isLoggedIn, async(req,res) => {
 
     try{
         const blog = req.body.blog;   
@@ -52,7 +54,7 @@ router.post('/blogs', async(req,res) => {
 
 
 //Showing a particular blog
-router.get('/blogs/:id', async(req,res) => {
+router.get('/blogs/:id',isLoggedIn, async(req,res) => {
 
     try{
         const blog = await Blog.findById(req.params.id).populate('comments');
@@ -67,7 +69,7 @@ router.get('/blogs/:id', async(req,res) => {
 })
 
 //Getting a form for editing
-router.get('/blogs/:id/edit', async(req,res) => {
+router.get('/blogs/:id/edit', isLoggedIn, async(req,res) => {
 
     try{
         const blog = await Blog.findById(req.params.id);
@@ -84,7 +86,7 @@ router.get('/blogs/:id/edit', async(req,res) => {
 
 
 //Patch request for Updating a Post
-router.patch('/blogs/:id', async(req,res) => {
+router.patch('/blogs/:id',isLoggedIn, async(req,res) => {
 
     try{
         await Blog.findByIdAndUpdate(req.params.id,req.body.blog);
@@ -100,7 +102,7 @@ router.patch('/blogs/:id', async(req,res) => {
 })
 
 //Deleting a Post
-router.delete('/blogs/:id', async(req,res) => {
+router.delete('/blogs/:id',isLoggedIn, async(req,res) => {
 
     try{
         await Blog.findByIdAndDelete(req.params.id);
@@ -117,14 +119,18 @@ router.delete('/blogs/:id', async(req,res) => {
 
 
 //posting a comment
-router.post('/blogs/:id/comment', async(req,res) => {
+router.post('/blogs/:id/comment',isLoggedIn, async(req,res) => {
 
     const blog = await Blog.findById(req.params.id);
-    const comment = new Comment(req.body);
+    const comment = new Comment({
+        user: req.user.username,
+        ...req.body
+    });
     blog.comments.push(comment);
 
     await comment.save();
     await blog.save();
+    
     res.redirect(`/blogs/${req.params.id}`);
 })
 
