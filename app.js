@@ -71,7 +71,7 @@ app.use((req,res,next) => {
 
 
 app.get('/', (req,res) => {
-    res.send("LANDING PAGE");
+    res.render("index");
 })
 
 app.use(blogRouter);
