@@ -19,7 +19,7 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/blogApp', 
+mongoose.connect(process.env.DB_URL, 
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
