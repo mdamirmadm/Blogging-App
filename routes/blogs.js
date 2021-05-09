@@ -3,7 +3,7 @@ const router = express.Router();
 const Blog = require('../models/blog');
 const Comment = require('../models/comment');
 const {isLoggedIn} = require('../middleware');
-// const upload = require('../handlers/multer');
+const upload = require('../handlers/multer');
 
 
 //Getting all the blogs
@@ -35,16 +35,24 @@ router.get('/blogs/new',isLoggedIn, (req,res) => {
 })
 
 //Posting a new Blog
-router.post('/blogs',isLoggedIn, async(req,res) => {
+router.post('/blogs',isLoggedIn,upload.single('img'), async(req,res) => {
 
+    console.log(req.file);
     try{
-        const blog = req.body.blog;   
+        const blog = new Blog({
+            img: req.file.filename,
+            title: req.body.title,
+            author: req.body.author,
+            user: req.user.username,
+            desc: req.body.desc
+        });   
         await Blog.create(blog);
         req.flash('success','New Blog Added Successfully.');
         res.redirect('/blogs');
     }
     catch(e){
         console.log("Could not post blog");
+        console.log(e);
         req.flash('error','Blog could not be posted due to some Error.')
         res.redirect('/blogs');
     }
@@ -62,6 +70,7 @@ router.get('/blogs/:id',isLoggedIn, async(req,res) => {
     }
     catch(e){
         console.log("Something Went Wrong!");
+        console.log(e);
         req.flash('error','No blog found');
         res.redirect('/blogs');
     }
@@ -89,12 +98,13 @@ router.get('/blogs/:id/edit', isLoggedIn, async(req,res) => {
 router.patch('/blogs/:id',isLoggedIn, async(req,res) => {
 
     try{
-        await Blog.findByIdAndUpdate(req.params.id,req.body.blog);
+        await Blog.findByIdAndUpdate(req.params.id,req.body);  
         req.flash('success','Post edited successfully');
         res.redirect(`/blogs/${req.params.id}`);
     }
     catch(e){
         console.log('Something went wrong');
+        console.log(e);
         req.flash('error','Post could not be updated due to some error');
         res.redirect(`/blogs/${req.params.id}`);
     }

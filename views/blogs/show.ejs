@@ -8,13 +8,13 @@
       <%-include('../partials/flash')%>
         <div class="col-lg-7 col-sm-12">
             <div class="card text-center w-100">
-                <img src="<%=blog.img%>" class="card-img-top" alt="...">
+                <img src="/upload/<%=blog.img%>" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title display-3"><%=blog.title%></h5>
                   <p class="card-title text-muted">Author: <%=blog.author%></p>
                   <p class="card-text lead"><%=blog.desc%></p>
 
-                  <%if(currentUser && blog.author===currentUser.username){%>
+                  <%if(currentUser && blog.user===currentUser.username){%>
                   <div class="d-flex justify-content-center">
                     <a href="<%=blog._id%>/edit" class="btn btn-primary">Edit</a>
                     <form action="/blogs/<%=blog._id%>?_method=DELETE" method="POST" style="margin-left: 5px;">

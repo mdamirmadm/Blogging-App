@@ -17,6 +17,10 @@ const blogSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    user: {
+        type: String,
+        required: true
+    },
     comments: [
         {
             type: mongoose.Schema.Types.ObjectId,

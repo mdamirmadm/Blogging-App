@@ -19,7 +19,7 @@ const authRoutes = require('./routes/auth');
 
 const app = express();
 
-mongoose.connect(process.env.DB_URL, 
+mongoose.connect('mongodb://localhost:27017/blogApp', 
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -36,7 +36,7 @@ mongoose.connect(process.env.DB_URL,
 
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'/views'));
-app.use(express.static(path.join(__dirname,'/public')));
+app.use(express.static(path.join(__dirname,'public')));
 app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 

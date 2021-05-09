@@ -8,22 +8,22 @@
                 <h1 class="display-3 mb-3">Edit Blog</h1>
                 <div class="mb-3">
                   <label for="title" class="form-label">Title</label>
-                  <input type="text" class="form-control" id="title" name="blog[title]" placeholder="Title" value="<%=blog.title%>" required>
+                  <input type="text" class="form-control" id="title" name="title" placeholder="Title" value="<%=blog.title%>" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="img" class="form-label">Image URL</label>
-                    <input type="text" class="form-control" id="img" name="blog[img]" placeholder="Image URL" value="<%=blog.img%>" required>
+                    <input type="text" class="form-control" id="img" name="img" placeholder="Image URL" value="<%=blog.img%>">
                 </div>
 
                 <div class="mb-3">
                     <label for="author" class="form-label">Author</label>
-                    <input type="text" class="form-control" id="author" name="blog[author]" placeholder="Author" value="<%=blog.author%>" required>
+                    <input type="text" class="form-control" id="author" name="author" placeholder="Author" value="<%=blog.author%>" required>
                 </div>
                
                 <div class="mb-3">
                     <label for="desc" class="form-label">Description</label>
-                    <textarea class="form-control" id="desc" name="blog[desc]" rows="5" cols="30" required><%=blog.desc%></textarea>
+                    <textarea class="form-control" id="desc" name="desc" rows="5" cols="30" required><%=blog.desc%></textarea>
                   </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form>
