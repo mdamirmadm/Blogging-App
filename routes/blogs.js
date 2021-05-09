@@ -36,8 +36,6 @@ router.get('/blogs/new',isLoggedIn, (req,res) => {
 
 //Posting a new Blog
 router.post('/blogs',isLoggedIn,upload.single('img'), async(req,res) => {
-
-    console.log(req.file);
     try{
         const blog = new Blog({
             img: req.file.filename,
@@ -95,10 +93,25 @@ router.get('/blogs/:id/edit', isLoggedIn, async(req,res) => {
 
 
 //Patch request for Updating a Post
-router.patch('/blogs/:id',isLoggedIn, async(req,res) => {
+router.patch('/blogs/:id',isLoggedIn,upload.single('img'), async(req,res) => {
 
-    try{
-        await Blog.findByIdAndUpdate(req.params.id,req.body);  
+    try{          
+        if(req.file){
+            var blog = {
+                title: req.body.title,
+                img: req.file.filename,
+                author: req.body.author,
+                desc: req.body.desc
+            }
+        }else{
+            var blog = {
+                title: req.body.title,
+                author: req.body.author,
+                desc: req.body.desc
+            }
+        }
+        console.log(req.body);
+        await Blog.findByIdAndUpdate(req.params.id,blog);  
         req.flash('success','Post edited successfully');
         res.redirect(`/blogs/${req.params.id}`);
     }
