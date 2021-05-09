@@ -136,7 +136,7 @@ router.post('/blogs/:id/comment',isLoggedIn, async(req,res) => {
 
 router.get('/error',(req,res) => {
 
-    res.render('/blogs/error');
+    res.render('blogs/error');
 })
 
 
