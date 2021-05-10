@@ -4,6 +4,8 @@ const Blog = require('../models/blog');
 const Comment = require('../models/comment');
 const {isLoggedIn} = require('../middleware');
 const upload = require('../handlers/multer');
+const cloudinary = require('../handlers/cloudinary');
+const { closeDelimiter } = require('ejs');
 
 
 //Getting all the blogs
@@ -37,8 +39,10 @@ router.get('/blogs/new',isLoggedIn, (req,res) => {
 //Posting a new Blog
 router.post('/blogs',isLoggedIn,upload.single('img'), async(req,res) => {
     try{
+        const result = await cloudinary.uploader.upload(req.file.path);
         const blog = new Blog({
-            img: req.file.filename,
+            img: result.secure_url,
+            cloudinary_id: result.public_id,
             title: req.body.title,
             author: req.body.author,
             user: req.user.username,
@@ -97,9 +101,13 @@ router.patch('/blogs/:id',isLoggedIn,upload.single('img'), async(req,res) => {
 
     try{          
         if(req.file){
+            let blog_id = await Blog.findById(req.params.id);
+            await cloudinary.uploader.destroy(blog_id.cloudinary_id);
+            const result = await cloudinary.uploader.upload(req.file.path);
             var blog = {
                 title: req.body.title,
-                img: req.file.filename,
+                img: result.secure_url,
+                cloudinary_id: result.public_id,
                 author: req.body.author,
                 desc: req.body.desc
             }
@@ -110,7 +118,7 @@ router.patch('/blogs/:id',isLoggedIn,upload.single('img'), async(req,res) => {
                 desc: req.body.desc
             }
         }
-        console.log(req.body);
+
         await Blog.findByIdAndUpdate(req.params.id,blog);  
         req.flash('success','Post edited successfully');
         res.redirect(`/blogs/${req.params.id}`);
@@ -128,6 +136,8 @@ router.patch('/blogs/:id',isLoggedIn,upload.single('img'), async(req,res) => {
 router.delete('/blogs/:id',isLoggedIn, async(req,res) => {
 
     try{
+        const blog = await Blog.findById(req.params.id);
+        await cloudinary.uploader.destroy(blog.cloudinary_id);
         await Blog.findByIdAndDelete(req.params.id);
         req.flash('success','Post Deleted Successfully!');
         res.redirect('/blogs');

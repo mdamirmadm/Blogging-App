@@ -5,6 +5,9 @@ const blogSchema = new mongoose.Schema({
     img : {
         type: String
     },
+    cloudinary_id: {
+        type: String
+    },
     title: {
         type: String,
         required: true

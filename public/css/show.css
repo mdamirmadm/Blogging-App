@@ -1,0 +1,17 @@
+.card{
+    margin: 5px auto;
+    box-shadow: none;
+}
+
+
+@media (max-width: 576px) { 
+    .card{
+        margin: 5px auto;
+        box-shadow: none;
+    }
+
+    .card-text{
+        font-size: 16px;
+    }
+
+}

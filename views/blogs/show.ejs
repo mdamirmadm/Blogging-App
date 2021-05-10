@@ -1,6 +1,8 @@
 <%-include('../partials/header')%>
 <%-include('../partials/navbar')%>
 <link rel="stylesheet" type="text/css" href="/css/star.css">
+<link rel="stylesheet" type="text/css" href="/css/show.css">
+
 
 <div class="container mt-3">
 
@@ -8,7 +10,7 @@
       <%-include('../partials/flash')%>
         <div class="col-lg-7 col-sm-12">
             <div class="card text-center w-100">
-                <img src="/upload/<%=blog.img%>" class="card-img-top" alt="...">
+                <img src="<%=blog.img%>" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title display-3"><%=blog.title%></h5>
                   <p class="card-title text-muted">Author: <%=blog.author%></p>
