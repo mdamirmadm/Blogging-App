@@ -16,18 +16,71 @@
                   <p class="card-title text-muted">Author: <%=blog.author%></p>
                   <p class="card-text lead"><%=blog.desc%></p>
 
-                  <%if(currentUser && blog.user===currentUser.username){%>
-                  <div class="d-flex justify-content-center">
+                  <!-- Like and Dislike logic starts here -->
+                  <div class="mt-3 mb-3">
+                    <%liked = false%>
+                   <p><strong>Likes: <%=blog.likes.length%></strong></p>
+                    <strong>Liked by:</strong>
+                    <%for(let like of blog.likes){%>
+                      <em><%=like.user%> </em>
+                      <em><%=currentUser.name%></em>
+                      <%liked = true%>
+                      <%if(like.user===currentUser.username){%>
+                        <p>You have liked this post</p>
+                      <%}%>
+                    <%}%>
+                  </div>
+
+                  <!-- Logic to display Like and Dislike Button based on the condition -->
+                <div class="d-flex justify-content-center">
+                  <%if(blog.likes.length!==0){
+                    isLiked = 0;
+                    like_user = '';
+                    for(let like of blog.likes){
+                      if(like.user===currentUser.username){
+                        isLiked = 1;
+                        likeID = like._id;
+                        like_user = like.user;
+                      }
+                    }
+                      if(like_user===currentUser.username){%>
+                        <!-- If user exists in likes array then display dislike button to pop the user from the likes array  -->
+                        <form action="/blogs/<%=blog._id%>/dislike/<%=likeID%>?_method=DELETE" method="POST">
+                          <button class="btn btn-secondary" style="margin-right: 5px;">Dislike</button>
+                        </form>
+                      <%}else{%>
+                        <!-- If user doesnot exists in the likes array then display like button -->
+                        <form action="/blogs/<%=blog._id%>/like" method="POST">
+                          <button class="btn btn-primary" style="margin-right: 5px;">Like</button>
+                        </form>
+
+                      <%}
+
+                  }else{%>
+                    <!-- If likes array is empty then display like button -->
+                    <form action="/blogs/<%=blog._id%>/like" method="POST">
+                      <button class="btn btn-primary" style="margin-right: 5px;">Like</button>
+                    </form>
+                    <!-- else ends here -->
+                  <%}
+
+                  <!-- Conditions to display the edit and delete button -->
+                  if(currentUser && blog.user===currentUser.username){%>
+                  
                     <a href="<%=blog._id%>/edit" class="btn btn-primary">Edit</a>
                     <form action="/blogs/<%=blog._id%>?_method=DELETE" method="POST" style="margin-left: 5px;">
                         <button class="btn btn-danger">Delete</button>
                     </form>
-                  </div>
+                    
                   <%}%>
-
-                </div>
+                  </div>
+                  <!-- flex div ends here -->
               </div>
-        </div>
+                 <!-- Card Body Ends Here -->
+            </div>
+              <!-- Card ends here up -->
+          </div>
+          <!-- column div ends here -->
 
         <div class="offset-1 col-10 col-lg-4">
             <h1 class="display-4 mt-5"><i class="fa fa-comments" aria-hidden="true"></i> Comments</h1>
@@ -70,6 +123,7 @@
                       <p class="card-text"><%=comment.comment%></p>
                     </div>
                   </div>
+                 
             <%}%>
             
         </div>

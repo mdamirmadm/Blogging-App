@@ -6,6 +6,7 @@ const {isLoggedIn} = require('../middleware');
 const upload = require('../handlers/multer');
 const cloudinary = require('../handlers/cloudinary');
 const { closeDelimiter } = require('ejs');
+const Like = require('../models/like');
 
 
 //Getting all the blogs
@@ -67,8 +68,19 @@ router.post('/blogs',isLoggedIn,upload.single('img'), async(req,res) => {
 router.get('/blogs/:id',isLoggedIn, async(req,res) => {
 
     try{
-        const blog = await Blog.findById(req.params.id).populate('comments');
-        res.render('blogs/show', { blog });
+        Blog.findById(req.params.id).populate([{
+            path: 'comments',
+            model: 'Comment'
+        }, {
+            path: 'likes',
+            model: 'Like'
+        }]).exec(function(err,blog){
+            if(err){
+                console.log(err);
+            }
+            return res.render('blogs/show', { blog });
+        }); 
+        
     }
     catch(e){
         console.log("Something Went Wrong!");
@@ -144,6 +156,7 @@ router.delete('/blogs/:id',isLoggedIn, async(req,res) => {
     }
     catch(e){
         console.log('Something went wrong');
+        console.log(e);
         req.flash('error','Post could not be Deleted due to some error');
         res.redirect(`/blogs/${req.params.id}`);
     }
@@ -170,6 +183,34 @@ router.post('/blogs/:id/comment',isLoggedIn, async(req,res) => {
 router.get('/error',(req,res) => {
 
     res.render('blogs/error');
+})
+
+router.post('/blogs/:id/like',isLoggedIn, async(req,res) => {
+        const blog = await Blog.findById(req.params.id);
+        const like = new Like({
+            user: req.user.username
+        })
+    
+        blog.likes.push(like);
+    
+        await like.save();
+        await blog.save();
+        
+        res.redirect(`/blogs/${req.params.id}`);
+    
+//     // catch(e){
+//     //     console.log(e);
+//     //     req.flash('error','Some error occurred');
+//     //     res.redirect(`/blogs/${req.params.id}`);
+//     // }
+   
+})
+
+router.delete('/blogs/:id/dislike/:likeId',async(req,res) => {
+    const {id,likeId} = req.params;
+    await Blog.findByIdAndUpdate(id,{$pull:{likes: likeId}});
+    // console.log('Disliked successfully');
+    res.redirect(`/blogs/${id}`);
 })
 
 
